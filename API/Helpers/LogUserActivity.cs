@@ -16,7 +16,7 @@ namespace API.Helpers
             if (!resultContext.HttpContext.User.Identity.IsAuthenticated) return;
 
             var unitOfWork = resultContext.HttpContext.RequestServices.GetService<UnitOfWork>();
-            var user = await unitOfWork.UserRepository.GetUserByIdAsync(resultContext.HttpContext.User.GetUserId());
+            var user = await unitOfWork.GetRepo<UserRepository>().GetUserByIdAsync(resultContext.HttpContext.User.GetUserId());
 
             user.LastActive = DateTime.UtcNow;
             await unitOfWork.Complete();

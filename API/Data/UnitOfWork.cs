@@ -1,25 +1,38 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System;
 
 namespace API.Data
 {
     public class UnitOfWork
     {
-        private readonly DataContext _context;
-        private readonly IMapper _mapper;
+        internal readonly DataContext _context;
+        internal readonly IMapper _mapper;
         public UnitOfWork(DataContext context, IMapper mapper)
         {
             _mapper = mapper;
             _context = context;
         }
 
-        public UserRepository UserRepository => new UserRepository(_context, this, _mapper);
-        public MemberRepository MemberRepository => new MemberRepository(_context, this, _mapper);
-        public SnitchRepository SnitchRepository => new SnitchRepository(_context, this, _mapper);
-        public SnitchPollRepository SnitchPollRepository => new SnitchPollRepository(_context, this, _mapper);
-        public RichRepository ChoreRepository => new RichRepository(_context, this, _mapper);
-        public FamilyRepository FamilyRepository => new FamilyRepository(_context, this, _mapper);
+        private Dictionary<Type, BaseRepository> _repositories;
+        public TRepo GetRepo<TRepo>() where TRepo : BaseRepository, new()
+        {
+            var repoType = typeof(TRepo);
+
+            if (!_repositories.ContainsKey(repoType))
+                _repositories.Add(typeof(TRepo), BaseRepository.CreateRepo<TRepo>(_context, this, _mapper));
+
+            var repo = _repositories[repoType] as TRepo;
+
+            if (repo is null)
+                _repositories.Remove(repoType);
+            else
+                return repo;
+
+            return GetRepo<TRepo>();
+        }
 
         public async Task<bool> Complete()
         => await _context.SaveChangesAsync() > 0;

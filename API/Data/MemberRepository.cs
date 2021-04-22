@@ -9,18 +9,24 @@ namespace API.Data
 {
     public class MemberRepository : BaseRepository
     {
-        public MemberRepository(DataContext context, UnitOfWork unitOfWork, IMapper mapper) : base(context, unitOfWork, mapper) { }
+        private UserRepository _userRepository;
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            _userRepository = _unitOfWork.GetRepo<UserRepository>();
+        }
 
         public async Task<MemberDto> GetMemberByIdAsync(int id)
         {
-            var user = await _unitOfWork.UserRepository.GetUserByIdAsync(id);
+            var user = await _userRepository.GetUserByIdAsync(id);
 
             return _mapper.Map<MemberDto>(user);
         }
 
         public async Task<MemberDto> GetMemberByUsernameAsync(string username)
         {
-            var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(username);
+            var user = await _userRepository.GetUserByUsernameAsync(username);
 
             return _mapper.Map<MemberDto>(user);
         }

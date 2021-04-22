@@ -1,7 +1,9 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Entities
 {
+    [Table("Chores")]
     public class Chore
     {
         public int Id { get; set; }
@@ -10,6 +12,9 @@ namespace API.Entities
 
         public AppUser Creator { get; set; }
         public int CreatorId { get; set; }
+
+        public AppUser Target { get; set; }
+        public int TargetId { get; set; }
 
         public Photo Photo { get; set; }
         public int PhotoId { get; set; }

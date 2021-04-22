@@ -18,8 +18,10 @@ namespace API.Controllers
         private readonly TokenService _tokenService;
         private readonly IMapper _mapper;
         private readonly UnitOfWork _unitOfWork;
+        private readonly UserRepository _userRepository;
         public AccountController(UnitOfWork unitOfWork, TokenService tokenService, IMapper mapper)
         {
+            _userRepository = unitOfWork.GetRepo<UserRepository>();
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _tokenService = tokenService;
@@ -28,7 +30,7 @@ namespace API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
-            if (await _unitOfWork.UserRepository.UserExistsAsync(registerDto.Username))
+            if (await _userRepository.UserExistsAsync(registerDto.Username))
                 return BadRequest("Username is taken");
 
             using (var hmac = new HMACSHA512())
@@ -39,7 +41,7 @@ namespace API.Controllers
                 user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password));
                 user.PasswordSalt = hmac.Key;
 
-                _unitOfWork.UserRepository.AddUser(user);
+               _userRepository.AddUser(user);
 
                 if (!await _unitOfWork.Complete())
                     throw new Exception("Registration failed, the user could not be created");
@@ -52,7 +54,7 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(loginDto.Username);
+            var user = await _userRepository.GetUserByUsernameAsync(loginDto.Username);
 
             if (user is null) return Unauthorized("Invalid username");
 

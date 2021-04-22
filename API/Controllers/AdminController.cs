@@ -12,21 +12,23 @@ namespace API.Controllers
 {
     public class AdminController : BaseApiController
     {
+        private readonly UserRepository _userRepository;
         private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         public AdminController(UnitOfWork unitOfWork, IMapper mapper)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _userRepository = unitOfWork.GetRepo<UserRepository>();
         }
 
         [Authorize(Policy = "RequireAdminRole")]
         [HttpGet("users-with-role")]
         public async Task<ActionResult<IEnumerable<UserAdminDto>>> GetUsers([FromQuery] FiltrationParams filtrationParams)
         {
-            var users = await _unitOfWork.UserRepository.GetUsersAsync(filtrationParams);
+            var users = await _userRepository.GetUsersAsync(filtrationParams);
 
-            Response.AddFiltrationHeader(users);   
+            Response.AddFiltrationHeader(users);
 
             return users.Result;
         }
@@ -38,13 +40,13 @@ namespace API.Controllers
             if (User.GetUserName() == username.ToLower())
                 return BadRequest("You can not change your own role");
 
-            var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(username);
+            var user = await _userRepository.GetUserByUsernameAsync(username);
 
             if (user is null) return NotFound($"Could not find user with username: '{username}'");
 
             user.UserRole = role;
 
-            _unitOfWork.UserRepository.UpdateUser(user);
+            _userRepository.UpdateUser(user);
 
             if (!await _unitOfWork.Complete()) return BadRequest("Failed to change user role");
 

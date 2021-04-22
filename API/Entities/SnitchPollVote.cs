@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace API.Entities
 {
+    [Table("SnitchPollVotes")]
     public class SnitchPollVote
     {
         public int Id { get; set; }

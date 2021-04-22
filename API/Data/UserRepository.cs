@@ -11,8 +11,6 @@ namespace API.Data
 {
     public class UserRepository : BaseRepository
     {
-        public UserRepository(DataContext context, UnitOfWork unitOfWork, IMapper mapper) : base(context, unitOfWork, mapper) { }
-
         public async Task<bool> UserExistsAsync(string username)
         {
             return await _context.Users.AnyAsync(u => u.Username == username.ToLower());

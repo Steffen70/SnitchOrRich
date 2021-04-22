@@ -9,7 +9,7 @@ namespace API.Entities
         public Snitch Snitch { get; set; }
 
         public bool IsIncomplete => this.Creator is null;
-        public bool Expired => Snitch?.Created.AddHours(Family.SnitchDeadlineHours) > Completed;
-        public int Multiplier => (int) Math.Floor(((Completed ?? DateTime.UtcNow) - Snitch.Created).TotalHours);
+        public bool IsExpired => Snitch?.Created.AddHours(Family.SnitchDeadlineHours) > Completed;
+        public int Multiplier => (int)Math.Floor(((Completed ?? DateTime.UtcNow) - Snitch.Created).TotalHours);
     }
 }

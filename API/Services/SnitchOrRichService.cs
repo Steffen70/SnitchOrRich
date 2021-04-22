@@ -1,6 +1,9 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
 using API.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Services
 {
@@ -12,24 +15,37 @@ namespace API.Services
             _unitOfWork = unitOfWork;
         }
 
-        // function createSnitch(target, minusPoints) => new instance of snitch + new instance of rich with set snitch
+        public void OnPoleSuccessAsync(Snitch snitch, bool targetIsGuilty)
+        => snitch.Rich.Target = targetIsGuilty ? snitch.Target : snitch.Creator;
 
-        // function onPoleSuccess(this snitch snitch, bool targetSchuldig) => snitch.rich.target = targetSchulding ? snitch.target : snitch.creator
-        public async Task OnPoleSuccessAsync()
+        public void CompleteRichForSnitch(Snitch snitch, AppUser user)
         {
-
+            snitch.Rich.Completed = DateTime.UtcNow;
+            snitch.Rich.Creator = user;
         }
 
-        // function setPoints(this snitch snitch, listmoderatorpoints) => snitch.rich.RichReview.Points = listmoderatorpoints.average()
-        public async Task SetPointsAsync(Snitch snitch)
+        public async Task SetRichPoints(Snitch snitch)
+        => snitch.Rich.Points = (int)Math.Round(await snitch.SnitchPoll.Votes
+            .AsQueryable()
+            .AverageAsync(v => v.Points), 0);
+
+        public async Task<int> GetPointsForUser(AppUser user, int month)
         {
+            var minusPoints = await _unitOfWork._context.Snitches
+                .Where(s => s.Created.Month == month)
+                .Where(s => s.Creator == user || s.Target == user)
+                .Select(s => s.Rich)
+                .Where(r => (r.IsIncomplete || r.Target == user) && r.IsExpired)
+                .SumAsync(r => r.Points * r.Multiplier);
 
-        }
+            var plusPoints = await _unitOfWork._context.RichEntries
+                .Where(s => s.Created.Month == month)
+                .Where(r => r.Creator == user)
+                .Where(r => r.Target != user)
+                .Where(r => !r.IsExpired)
+                .SumAsync(r => r.Points);
 
-        // function completeRichForSnitch(this snitch snitch, person me) => snitch.Rich.Timestamp = now; snitch.rich.creator = me
-        public async Task CompleteRichForSnitch(Snitch snitch, AppUser user)
-        {
-
+            return plusPoints - minusPoints;
         }
     }
 }
