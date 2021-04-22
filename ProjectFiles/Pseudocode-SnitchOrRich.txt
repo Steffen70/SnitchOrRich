@@ -1,0 +1,63 @@
+Settings.SnitchDeadline
+
+
+class User {
+    PointsOfCurrentMonth => getPointsforMonth(currentMonth)
+
+    function getPointsforMonth(currentMonth){
+        minusPoints = snitches.where(s => s.creator || s.Target == ME)
+            .filter(s => s.Timestamp is in curren month)
+            .select(snitch => snitch.Rich)
+            .filter(rich => (rich.Incomplete || rich.target == me) && rich.Abgelaufen)
+            .sum(minisauornig = (minisauornig.RichReview.Points * minisauornig.RichReview.Multiplier)
+
+        plusPoints = richentries.where(r => r.creator == me)
+                        .filter(r => r.Timestamp is in curren month)
+                        .filter(r => r.target != me)
+                        .filter(r => !r.Abgelaufen).sum(r => r.RichReview.Points)
+        return plusPoints - minusPoints
+    }
+}
+
+Snitch.cunstructor
+{
+    Snitch.Timestamp
+    Snitch.Rich = new Rich{ Creator = null, RichReview = new RichReview{ Points = points } }
+    Snitch.Target: User
+    Snitch.Creator: User = me
+}
+
+Rich.cunstructor
+{
+    Rich.Snitch(EF TwoWayDBinding)
+
+    Rich.Creator
+
+    Rich.Target
+
+    Rich.Incomplete = Rich.Creator is null
+
+    Rich.Timestamp(nullable)
+
+    Rich.RichReview.Points => return Rich.RichReview.Valid ? _points : 0
+
+    Rich.RichReview.Abgelaufen =
+        Snitch.Timestamp + Settings.SnitchDeadline > Rich.Timestamp ? false : true
+
+    Rich.RichReview.Multiplier = Rich.Timestamp || now - Snitch.Timestamp / Settings.SnitchDeadline
+}
+
+
+function createSnitch(target, minusPoints) => new instance of snitch + new instance of rich with set snitch
+
+function onPoleSuccess(this snitch snitch, bool targetSchuldig) => snitch.rich.target = targetSchulding ? snitch.target : snitch.creator
+
+function setPoints(this snitch snitch, listmoderatorpoints) => snitch.rich.RichReview.Points = listmoderatorpoints.average()
+
+function completeRichForSnitch(this snitch snitch, person me) => snitch.Rich.Timestamp = now; snitch.rich.creator = me
+
+
+//windows scheduler task (every month)
+function completeCurrentMonth() => snitches.filter(s => s.Timestamp is NOT in curren month).forEach(s => s.clone().timestamp = now)
+
+
