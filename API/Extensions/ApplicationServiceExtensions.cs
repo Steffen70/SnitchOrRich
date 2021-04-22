@@ -18,6 +18,7 @@ namespace API.Extensions
 
             services.AddScoped<SeedService>();
 
+            services.AddScoped<SnitchOrRichService>();
             services.AddScoped<TokenService>();
             services.AddScoped<UnitOfWork>();
             services.AddScoped<LogUserActivity>();

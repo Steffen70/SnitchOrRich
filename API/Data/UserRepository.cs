@@ -9,15 +9,9 @@ using API.Helpers.Filtration;
 
 namespace API.Data
 {
-    public class UserRepository
+    public class UserRepository : BaseRepository
     {
-        private readonly DataContext _context;
-        private readonly IMapper _mapper;
-        public UserRepository(DataContext context, IMapper mapper)
-        {
-            _mapper = mapper;
-            _context = context;
-        }
+        public UserRepository(DataContext context, UnitOfWork unitOfWork, IMapper mapper) : base(context, unitOfWork, mapper) { }
 
         public async Task<bool> UserExistsAsync(string username)
         {

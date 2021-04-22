@@ -7,17 +7,9 @@ using AutoMapper.QueryableExtensions;
 
 namespace API.Data
 {
-    public class MemberRepository
+    public class MemberRepository : BaseRepository
     {
-        private readonly DataContext _context;
-        private readonly UnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        public MemberRepository(DataContext context, UnitOfWork unitOfWork, IMapper mapper)
-        {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _context = context;
-        }
+        public MemberRepository(DataContext context, UnitOfWork unitOfWork, IMapper mapper) : base(context, unitOfWork, mapper) { }
 
         public async Task<MemberDto> GetMemberByIdAsync(int id)
         {

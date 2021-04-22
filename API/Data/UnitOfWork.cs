@@ -14,8 +14,12 @@ namespace API.Data
             _context = context;
         }
 
-        public UserRepository UserRepository => new UserRepository(_context, _mapper);
+        public UserRepository UserRepository => new UserRepository(_context, this, _mapper);
         public MemberRepository MemberRepository => new MemberRepository(_context, this, _mapper);
+        public SnitchRepository SnitchRepository => new SnitchRepository(_context, this, _mapper);
+        public SnitchPollRepository SnitchPollRepository => new SnitchPollRepository(_context, this, _mapper);
+        public RichRepository ChoreRepository => new RichRepository(_context, this, _mapper);
+        public FamilyRepository FamilyRepository => new FamilyRepository(_context, this, _mapper);
 
         public async Task<bool> Complete()
         => await _context.SaveChangesAsync() > 0;
