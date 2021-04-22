@@ -10,10 +10,9 @@ namespace API.Entities
         public Snitch Snitch { get; set; }
         public int SnitchId { get; set; }
 
-        public ICollection<SnitchPollAppUser> SnitchPollAppUsers { get; set; }
         public ICollection<SnitchPollVote> Votes { get; set; }
 
-        public IEnumerable<AppUser> PollOptions => SnitchPollAppUsers.Select(sp => sp.AppUser);
+        public IEnumerable<string> PollOptions => Snitch.Family.Members.Select(u => u.Username);
         public int RecommendedPoints => Snitch.Rich.Points;
     }
 }

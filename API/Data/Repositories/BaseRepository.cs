@@ -1,6 +1,6 @@
 using AutoMapper;
 
-namespace API.Data
+namespace API.Data.Repositories
 {
     public abstract class BaseRepository
     {
@@ -17,12 +17,8 @@ namespace API.Data
                 _unitOfWork = unitOfWork,
                 _context = context
             };
-            
-            repo.Initialize();
 
             return repo;
         }
-
-        public virtual void Initialize() { }
     }
 }

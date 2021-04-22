@@ -1,13 +1,12 @@
-using System.Threading.Tasks;
-using API.Entities;
-using Microsoft.EntityFrameworkCore;
-using AutoMapper;
-using API.DTOs;
-using AutoMapper.QueryableExtensions;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using API.DTOs;
+using API.Entities;
 using API.Helpers.Filtration;
+using AutoMapper.QueryableExtensions;
 
-namespace API.Data
+namespace API.Data.Repositories
 {
     public class UserRepository : BaseRepository
     {

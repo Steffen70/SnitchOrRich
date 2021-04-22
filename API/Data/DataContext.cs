@@ -1,6 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using API.Entities;
 using API.Helpers;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
 {
@@ -9,8 +9,8 @@ namespace API.Data
         public DbSet<AppUser> Users { get; set; }
 
         public DbSet<Family> Families { get; set; }
-        public DbSet<Snitch> Snitches {get; set;}
-        public DbSet<Rich> RichEntries {get; set;}
+        public DbSet<Snitch> Snitches { get; set; }
+        public DbSet<Rich> RichEntries { get; set; }
         public DbSet<SnitchPoll> SnitchPolls { get; set; }
 
         public DataContext(DbContextOptions options) : base(options) { }
@@ -18,18 +18,7 @@ namespace API.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<SnitchPollAppUser>().HasKey(sp => new { sp.SnitchPollId, sp.AppUserId });
-
-            builder.Entity<SnitchPollAppUser>()
-                .HasOne(sp => sp.SnitchPoll)
-                .WithMany(sp => sp.SnitchPollAppUsers)
-                .HasForeignKey(sp => sp.SnitchPollId);
-
-            builder.Entity<SnitchPollAppUser>()
-                .HasOne(sp => sp.AppUser)
-                .WithMany(au => au.SnitchPollAppUsers)
-                .HasForeignKey(sp => sp.AppUserId);
-                
+            builder.Entity<AppUser>(a => a.HasIndex(u => u.Username).IsUnique());
             //Write Fluent API configurations here
 
             builder.ApplyUtcDateTimeConverter();

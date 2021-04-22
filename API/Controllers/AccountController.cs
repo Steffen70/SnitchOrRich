@@ -2,13 +2,14 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using API.Data;
+using API.Data.Repositories;
 using API.DTOs;
 using API.Entities;
 using API.Services;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
@@ -16,14 +17,10 @@ namespace API.Controllers
     public class AccountController : BaseApiController
     {
         private readonly TokenService _tokenService;
-        private readonly IMapper _mapper;
-        private readonly UnitOfWork _unitOfWork;
         private readonly UserRepository _userRepository;
-        public AccountController(UnitOfWork unitOfWork, TokenService tokenService, IMapper mapper)
+        public AccountController(UnitOfWork unitOfWork, IMapper mapper, TokenService tokenService) : base(unitOfWork, mapper)
         {
             _userRepository = unitOfWork.GetRepo<UserRepository>();
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
             _tokenService = tokenService;
         }
 
@@ -41,7 +38,7 @@ namespace API.Controllers
                 user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password));
                 user.PasswordSalt = hmac.Key;
 
-               _userRepository.AddUser(user);
+                _userRepository.AddUser(user);
 
                 if (!await _unitOfWork.Complete())
                     throw new Exception("Registration failed, the user could not be created");

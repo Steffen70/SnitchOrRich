@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using API.Entities;
-using Microsoft.IdentityModel.Tokens;
-using API.Helpers;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using API.Data;
+using API.Entities;
+using API.Helpers;
 
 namespace API.Services
 {
@@ -15,9 +15,10 @@ namespace API.Services
     {
         private readonly SymmetricSecurityKey _key;
         private readonly UnitOfWork _unitOfWork;
-        public TokenService(IOptions<ApiSettings> apiSettings, UnitOfWork unitOfWork)
+        public TokenService(UnitOfWork unitOfWork, IOptions<ApiSettings> apiSettings)
         {
             _unitOfWork = unitOfWork;
+
             var tokenKey = apiSettings.Value.TokenKey;
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey));
         }

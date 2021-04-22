@@ -2,11 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
-using System.IO;
-using System.Collections.ObjectModel;
+using AutoMapper;
 
 namespace API.Helpers.Filtration
 {
@@ -24,7 +21,7 @@ namespace API.Helpers.Filtration
     public class FilteredList<TList, THeader> where THeader : FiltrationHeader
     {
         public THeader Header { get; set; }
-        public List<TList> Result {get; set;} = new List<TList>();
+        public List<TList> Result { get; set; } = new List<TList>();
 
         public FilteredList() { }
 

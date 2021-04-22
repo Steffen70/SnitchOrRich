@@ -1,8 +1,9 @@
-using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using API.Data.Repositories;
+using AutoMapper;
 
 namespace API.Data
 {
@@ -16,7 +17,7 @@ namespace API.Data
             _context = context;
         }
 
-        private Dictionary<Type, BaseRepository> _repositories;
+        private Dictionary<Type, BaseRepository> _repositories = new Dictionary<Type, BaseRepository>();
         public TRepo GetRepo<TRepo>() where TRepo : BaseRepository, new()
         {
             var repoType = typeof(TRepo);

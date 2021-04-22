@@ -1,12 +1,11 @@
-using API.Data;
-using API.Helpers;
-using API.Services;
-using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using API.Data;
+using API.Helpers;
+using API.Services;
 
 namespace API.Extensions
 {
@@ -18,7 +17,6 @@ namespace API.Extensions
 
             services.AddScoped<SeedService>();
 
-            services.AddScoped<SnitchOrRichService>();
             services.AddScoped<TokenService>();
             services.AddScoped<UnitOfWork>();
             services.AddScoped<LogUserActivity>();

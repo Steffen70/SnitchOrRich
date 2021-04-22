@@ -8,7 +8,8 @@ namespace API.Entities
         public int Id { get; set; }
         public string PublicId { get; set; }
 
-        public Chore Chore { get; set; }
-        public int ChoreId { get; set; }
+        public Rich Rich { get; set; }
+        public Snitch Snitch { get; set; }
+        public IChore Chore => (IChore)Rich ?? Snitch;
     }
 }

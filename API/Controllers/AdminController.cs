@@ -1,24 +1,21 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using API.Data;
+using API.Data.Repositories;
 using API.DTOs;
 using API.Extensions;
 using API.Helpers.Filtration;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     public class AdminController : BaseApiController
     {
         private readonly UserRepository _userRepository;
-        private readonly UnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        public AdminController(UnitOfWork unitOfWork, IMapper mapper)
+        public AdminController(UnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
             _userRepository = unitOfWork.GetRepo<UserRepository>();
         }
 

@@ -1,32 +1,33 @@
-using System.Collections.Generic;
-using System.Text.Json;
-using System.Threading.Tasks;
-using API.Entities;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using API.Helpers;
-using API.DTOs;
 using API.Data;
+using API.Data.Repositories;
+using API.DTOs;
+using API.Entities;
+using API.Helpers;
 
 namespace API.Services
 {
     public class SeedService
     {
-        private readonly UserRepository _userRepository;
-        private readonly UnitOfWork _unitOfWork;
-        private readonly IWebHostEnvironment _env;
         private readonly IOptions<ApiSettings> _apiSettings;
+        private readonly IWebHostEnvironment _env;
+        private readonly UnitOfWork _unitOfWork;
+        private readonly UserRepository _userRepository;
         public SeedService(UnitOfWork unitOfWork, IWebHostEnvironment env, IOptions<ApiSettings> apiSettings)
         {
-            _apiSettings = apiSettings;
-            _env = env;
-            _unitOfWork = unitOfWork;
             _userRepository = unitOfWork.GetRepo<UserRepository>();
+            _unitOfWork = unitOfWork;
+            _env = env;
+            _apiSettings = apiSettings;
         }
 
         public async Task SeedData()

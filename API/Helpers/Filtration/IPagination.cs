@@ -1,5 +1,3 @@
-using System;
-
 namespace API.Helpers.Filtration
 {
     public interface IPagination

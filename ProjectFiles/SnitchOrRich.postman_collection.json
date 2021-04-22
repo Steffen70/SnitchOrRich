@@ -91,130 +91,6 @@
 			]
 		},
 		{
-			"name": "Members",
-			"item": [
-				{
-					"name": "GetMembers",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{test_token}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "https://localhost:5001/api/members?pageSize=3",
-							"protocol": "https",
-							"host": [
-								"localhost"
-							],
-							"port": "5001",
-							"path": [
-								"api",
-								"members"
-							],
-							"query": [
-								{
-									"key": "pageSize",
-									"value": "3"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetMemberById",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{test_token}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "https://localhost:5001/api/members/1",
-							"protocol": "https",
-							"host": [
-								"localhost"
-							],
-							"port": "5001",
-							"path": [
-								"api",
-								"members",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetMemberByUsername",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{test_token}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "https://localhost:5001/api/members/Test",
-							"protocol": "https",
-							"host": [
-								"localhost"
-							],
-							"port": "5001",
-							"path": [
-								"api",
-								"members",
-								"Test"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "Admin",
 			"item": [
 				{
@@ -240,7 +116,7 @@
 							}
 						],
 						"url": {
-							"raw": "https://localhost:5001/api/admin/users-with-role",
+							"raw": "https://localhost:5001/api/admin/users-with-role?pageSize=2",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -250,6 +126,12 @@
 								"api",
 								"admin",
 								"users-with-role"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "2"
+								}
 							]
 						}
 					},
